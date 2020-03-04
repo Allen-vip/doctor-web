@@ -1,0 +1,9 @@
+.el-table__body tr.current-row>td{
+  background-color: #fdf3ea;
+  color: #f19944;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+  background-color: #fdf3ea;
+  color: #f19944;
+}
