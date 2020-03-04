@@ -2,7 +2,7 @@
   <el-form
     ref="cfgEditForm"
     :model="cfgEditForm"
-    label-width="120px"
+    label-width="160px"
     v-loading="cfgEditFormLoading"
   >
     <el-form-item label="选择设备">
@@ -106,6 +106,43 @@
     <el-form-item label="门关闭时间（秒）" prop="closeTimeAfterOpen">
       <el-input-number v-model="cfgEditForm.closeTimeAfterOpen" :min="5" :max="9"></el-input-number>
     </el-form-item>
+    <el-form-item label="体温报警" prop="bodyTempGuardOn">
+      <el-switch
+        v-model="cfgEditForm.bodyTempGuardOn"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="开"
+        inactive-text="关"
+      ></el-switch>
+    </el-form-item>
+    <el-form-item label="体温报警上限值(℃)" prop="bodyTempGuardValue">
+      <el-input-number
+        v-bind:disabled="cfgEditForm.bodyTempGuardOn===false"
+        v-model="cfgEditForm.bodyTempGuardValue"
+        :min="36"
+        :max="40"
+        :precision="1"
+        :step="0.1"
+      ></el-input-number>
+    </el-form-item>
+    <el-form-item label="人脸识别" prop="faceDetectOn">
+      <el-switch
+        v-model="cfgEditForm.faceDetectOn"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="开"
+        inactive-text="关"
+      ></el-switch>
+    </el-form-item>
+    <el-form-item label="佩戴口罩识别" prop="maskRecgOn">
+      <el-switch
+        v-model="cfgEditForm.maskRecgOn"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="开"
+        inactive-text="关"
+      ></el-switch>
+    </el-form-item>
     <el-form-item>
       <el-button @click="onSubmit">提交</el-button>
       <el-button @click="onCancel">取消</el-button>
@@ -147,7 +184,11 @@ export default {
         funcStop: false,
         gateOpen: false,
         doorCloseAlarmTime: 30,
-        gateOpenDisabled: false
+        gateOpenDisabled: false,
+        bodyTempGuardValue: 37.3,
+        bodyTempGuardOn: false,
+        faceDetectOn: true,
+        maskRecgOn: false
       }
     };
   },
@@ -173,7 +214,11 @@ export default {
           gateOpen: false,
           doorCloseAlarmTime: 30,
           closeTimeAfterOpen: 5,
-          gateOpenDisabled: false
+          gateOpenDisabled: false,
+          bodyTempGuardValue: 37.3,
+          bodyTempGuardOn: false,
+          faceDetectOn: true,
+          maskRecgOn: false
         };
         console.log("bofore:" + JSON.stringify(this.cfgEditForm));
         this.cfgEditForm = Object.assign({}, this.devcfg);
