@@ -142,6 +142,18 @@ export const apiUpdateUser = params => {
 export const apiAddUser = params => {
   return axios.post(API_NEW_VERSION + "/users/add", params);
 };
+export const apiAddConfig = params => {
+  return axios.post(API_NEW_VERSION + "/config/update", params);
+};
+export const apiAddConfigQuery = params => {
+  return axios.post(API_NEW_VERSION + "/config/query", params);
+};
+export const gateEvents = params => {
+  return axios.post(API_NEW_VERSION + "/gateevent/getByUserAliaId", params);
+};
+export const getByAgeRange = params => {
+  return axios.post(API_NEW_VERSION + "/users/getByAgeRange", params);
+};
 export const apiGenUserId = params => {
   return axios.get(API_NEW_VERSION + "/users/genuserid", { params: params });
 };

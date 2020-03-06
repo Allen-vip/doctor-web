@@ -6,17 +6,25 @@
         <el-form-item>
           <el-input v-model="filters.name" placeholder="请输入关键字"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" v-on:click="getUsers" style="marginLeft:20px">查询</el-button>
+        </el-form-item>
+        <!-- <el-form-item>
+          <el-checkbox v-model="setBlack" @change="blackCheckChange">黑名单</el-checkbox>
+        </el-form-item>-->
+      </el-form>
+      <el-form :inline="true" :model="filtersAge">
         <el-form-item label="年龄段搜索">
           <el-col :span="11">
-            <el-input-number v-model="filters.ageStart" controls-position="right" :min="1"></el-input-number>
+            <el-input v-model="filtersAge.young" type="number" placeholder="请输入"></el-input>
           </el-col>
-          <el-col class="line" :span="2">-</el-col>
+          <el-col class="line" :span="2" style="textAlign:center">-</el-col>
           <el-col :span="11">
-            <el-input-number v-model="filters.ageEnd" controls-position="right" :min="1"></el-input-number>
+            <el-input v-model="filtersAge.old" type="number" placeholder="请输入"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getUsers" style="marginLeft:20px">查询</el-button>
+          <el-button type="primary" v-on:click="getUsersAge" style="marginLeft:20px">查询</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -24,9 +32,6 @@
         <el-form-item>
           <el-button type="primary" @click="toggleVisibleModal">医嘱</el-button>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-checkbox v-model="setBlack" @change="blackCheckChange">黑名单</el-checkbox>
-        </el-form-item>-->
       </el-form>
     </el-col>
 
@@ -285,7 +290,7 @@
     <!-- 医嘱 -->
     <Advice :visibleAdvice="visibleAdvice" @toggleVisibleModal="toggleVisibleModal" />
     <!-- 门禁信息列表 -->
-    <List :visibleGuard="visibleGuard" :userId="userId" @toggleVisibleGuard="toggleVisibleGuard" />
+    <List :visibleGuard="visibleGuard" :aliaId="aliaId" @toggleVisibleGuard="toggleVisibleGuard" />
   </section>
 </template>
 
@@ -298,7 +303,12 @@ import {
   apiUpdateUser,
   apiAddUser
 } from "../../api/api";
-import { apiGetUserList, getDeviceList, apiGenUserId } from "../../api/api";
+import {
+  apiGetUserList,
+  getDeviceList,
+  apiGenUserId,
+  getByAgeRange
+} from "../../api/api";
 import { API_NEW_VERSION, API_HOST } from "../../api/api";
 import Advice from "./advice";
 import List from "./list";
@@ -313,9 +323,11 @@ export default {
         Authorization: sessionStorage.getItem("token")
       },
       filters: {
-        name: "",
-        ageStart: 0,
-        ageEnd: 0
+        name: ""
+      },
+      filtersAge: {
+        young: "",
+        old: ""
       },
       isAdmin: 0,
       setBlack: false,
@@ -330,7 +342,7 @@ export default {
       editLoading: false,
       visibleAdvice: false,
       visibleGuard: false,
-      userId: 0,
+      aliaId: 0,
       editFormRules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         gender: [
@@ -458,7 +470,7 @@ export default {
       this.visibleGuard = !this.visibleGuard;
     },
     showGuard(index, row) {
-      this.userId = row.id;
+      this.aliaId = row.aliaId;
       this.toggleVisibleGuard();
     },
     getDevices: function() {
@@ -484,8 +496,35 @@ export default {
       });
       return name;
     },
+    getUsersAge() {
+      this.filters.name = "";
+      if (!this.filtersAge.young || !this.filtersAge.old) {
+        return false;
+      }
+      getByAgeRange({
+        page: this.page,
+        count: 10,
+        young: this.filtersAge.young,
+        old: this.filtersAge.old
+      }).then(res => {
+        this.total = res.data.myModel.total || 100;
+        this.users = res.data.myModel.data;
+        this.listLoading = false;
+        this.users.forEach(user => {
+          user.validDevice = "";
+          let newIds = "";
+          user.url =
+            API_HOST +
+            "/file/face/" +
+            encodeURIComponent(encodeURIComponent(user.fnOnServer));
+          user.deviceIds = newIds;
+        });
+      });
+    },
     //获取用户列表
     getUsers() {
+      this.filtersAge.young = "";
+      this.filtersAge.old = "";
       let para = {
         page: this.page,
         count: 10,
@@ -497,10 +536,10 @@ export default {
         this.total = res.data.myModel.total;
         this.users = res.data.myModel.data;
         this.listLoading = false;
-
         this.users.forEach(user => {
           user.validDevice = "";
           let newIds = "";
+          user.url = API_HOST + user.webAccessName;
           if (user.deviceIds === "" || user.deviceIds === null) {
             return [];
           }
@@ -519,7 +558,6 @@ export default {
             user.validDevice = "无";
           }
           user.deviceIds = newIds;
-          user.url = API_HOST + user.webAccessName;
         });
       });
     },
