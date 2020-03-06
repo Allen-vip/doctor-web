@@ -173,15 +173,14 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过4MB</div>
           </el-upload>
         </el-form-item>
-
+        <el-transfer
+          v-model="selDevices"
+          :props="{ key: 'id', label: 'fullName' }"
+          :data="this.candidateDevices"
+          :titles="['待选', '已选']"
+          :button-texts="['移除', '选择']"
+        ></el-transfer>
         <!-- <el-form-item label="登记设备">
-          <el-transfer
-            v-model="selDevices"
-            :props="{ key: 'id', label: 'fullName' }"
-            :data="this.candidateDevices"
-            :titles="['待选', '已选']"
-            :button-texts="['移除', '选择']"
-          ></el-transfer>
         </el-form-item>
         <el-form-item label="黑名单">
           <el-checkbox-group v-model="blackList">
@@ -210,6 +209,9 @@
         </el-form-item>
         <el-form-item label="年龄" prop="age">
           <el-input v-model="addForm.age" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="mobile">
+          <el-input v-model="addForm.mobile" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="居住地址" prop="age">
           <el-input v-model="addForm.address" auto-complete="off"></el-input>
@@ -264,8 +266,7 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过4MB</div>
           </el-upload>
         </el-form-item>
-
-        <!-- <el-form-item label="登记设备">
+        <el-form-item label="登记设备">
           <el-transfer
             v-model="addForm.selDevices"
             :props="{ key: 'id', label: 'fullName' }"
@@ -274,7 +275,8 @@
             :button-texts="['移除', '选择']"
           ></el-transfer>
         </el-form-item>
-        <el-form-item label="黑名单">
+
+        <!-- <el-form-item label="黑名单">
           <el-checkbox-group v-model="blackList">
             <el-checkbox label="1">拒开</el-checkbox>
             <el-checkbox label="2">报警</el-checkbox>
@@ -353,6 +355,7 @@ export default {
             type: "number"
           }
         ],
+        fnOnServer: [{ required: true, message: "请上传图片到服务器" }],
         buildingNum: [
           { required: true, message: "请输入楼栋", trigger: "blur" }
         ],
@@ -379,6 +382,7 @@ export default {
         unitNum: "",
         roomNum: "",
         type: "",
+        mobile: "",
         identityCardNum: "",
         aliaId: "",
         fnOnServer: "",
@@ -399,9 +403,17 @@ export default {
             type: "number"
           }
         ],
+        mobile: [
+          {
+            required: true,
+            message: "请填写手机号码",
+            trigger: "blur"
+          }
+        ],
         buildingNum: [
           { required: true, message: "请输入楼栋", trigger: "blur" }
         ],
+        fnOnServer: [{ required: true, message: "请上传图片到服务器" }],
         unitNum: [{ required: true, message: "请输入单元", trigger: "blur" }],
         roomNum: [{ required: true, message: "请输入房间号", trigger: "blur" }],
         type: [
@@ -424,6 +436,7 @@ export default {
         buildingNum: "",
         unitNum: "",
         roomNum: "",
+        mobile: "",
         type: "",
         identityCardNum: "",
         aliaId: "",
@@ -507,7 +520,7 @@ export default {
         young: this.filtersAge.young,
         old: this.filtersAge.old
       }).then(res => {
-        this.total = res.data.myModel.total || 100;
+        this.total = res.data.myModel.total;
         this.users = res.data.myModel.data;
         this.listLoading = false;
         this.users.forEach(user => {
@@ -585,7 +598,7 @@ export default {
       this.editFormVisible = true;
       this.editForm = Object.assign({}, row);
 
-      if (row.deviceIds.length > 0) {
+      if (row.deviceIds && row.deviceIds !== null && row.deviceIds.length > 0) {
         this.selDevices = row.deviceIds.split(",").map(item => {
           return +item;
         });
