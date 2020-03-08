@@ -1,5 +1,12 @@
 <template>
-  <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <el-form
+    :model="ruleForm2"
+    :rules="rules2"
+    ref="ruleForm2"
+    label-position="left"
+    label-width="0px"
+    class="demo-ruleForm login-container"
+  >
     <h3 class="title">系统登录</h3>
     <el-form-item prop="account">
       <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
@@ -9,140 +16,161 @@
     </el-form-item>
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
+      <el-button
+        type="primary"
+        style="width:100%;"
+        @click.native.prevent="handleSubmit2"
+        :loading="logining"
+      >登录</el-button>
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-  import { requestLogin } from '../api/api'
-  import md5 from 'js-md5'
-  //import NProgress from 'nprogress'
-  export default {
-    data() {
-      return {
-        logining: false,
-        ruleForm2: {
-          account: 'admin',
-          checkPass: '123456'
-        },
-        rules2: {
-          account: [
-            { required: true, message: '请输入账号', trigger: 'blur' },
-            //{ validator: validaePass }
-          ],
-          checkPass: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            //{ validator: validaePass2 }
-          ]
-        },
-        checked: true
-      };
+import { requestLogin } from "../api/api";
+import md5 from "js-md5";
+//import NProgress from 'nprogress'
+export default {
+  data() {
+    return {
+      logining: false,
+      ruleForm2: {
+        account: "admin",
+        checkPass: ""
+      },
+      rules2: {
+        account: [
+          { required: true, message: "请输入账号", trigger: "blur" }
+          //{ validator: validaePass }
+        ],
+        checkPass: [
+          { required: true, message: "请输入密码", trigger: "blur" }
+          //{ validator: validaePass2 }
+        ]
+      },
+      checked: false
+    };
+  },
+  methods: {
+    handleReset2() {
+      this.$refs.ruleForm2.resetFields();
     },
-    methods: {
-      handleReset2() {
-        this.$refs.ruleForm2.resetFields();
-      },
-      handleSubmit2(ev) {
-        var _this = this;
-        this.$refs.ruleForm2.validate((valid) => {
-          if (valid) {
-            //_this.$router.replace('/table');
+    handleSubmit2(ev) {
+      var _this = this;
+      this.$refs.ruleForm2.validate(valid => {
+        if (valid) {
+          //_this.$router.replace('/table');
 
-            if(this.checked == true) {
-              this.setCookie(this.ruleForm2.account, this.ruleForm2.checkPass, 3)
-            } else {
-              this.clearCookie()
-            }
-            this.logining = true;
-            //NProgress.start();
-            var loginParams = { name: this.ruleForm2.account, passwd: md5(this.ruleForm2.checkPass) };
-            console.log("loginParams:" + JSON.stringify(loginParams))
-            requestLogin(loginParams).then(data => {
-              this.logining = false;
-              //NProgress.done();
-              console.log("requestLogin data:" + JSON.stringify(data))
-              let account = data.data.myModel.account
-              let token = data.data.myModel.token
-              if (account === null) {
-                let msg = "账号或密码错误"
-                this.$message({
-                  message: msg,
-                  type: 'error'
-                });
-              } else {
-                sessionStorage.setItem('isAdmin', account.isAdmin);
-                sessionStorage.setItem('accountId', account.id);
-                sessionStorage.setItem('token', JSON.stringify(token));
-                this.$store.commit('UPDATE_TOKEN', token)
-                this.$store.commit('UPDATE_ACCOUNT', account)
-                this.$router.push({ path: '/user' });
-              }
-            });
+          if (this.checked == true) {
+            this.setCookie(
+              this.ruleForm2.account,
+              this.ruleForm2.checkPass,
+              this.checked,
+              3
+            );
           } else {
-            console.log('error submit!!');
-            return false;
+            this.clearCookie();
           }
-        });
-      },
-      //设置cookie
-      setCookie(c_name, c_pwd, exdays) {
-        var exdate = new Date(); //获取时间
-        exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
-        //字符串拼接cookie
-        window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
-        window.document.cookie = "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
-      },
-      //读取cookie
-      getCookie: function() {
-        if (document.cookie.length > 0) {
-          var arr = document.cookie.split('; '); //这里显示的格式需要切割一下自己可输出看下
-          for (var i = 0; i < arr.length; i++) {
-            var arr2 = arr[i].split('='); //再次切割
-            //判断查找相对应的值
-            if (arr2[0] == 'userName') {
-              this.ruleForm2.account = arr2[1]; //保存到保存数据的地方
-            } else if (arr2[0] == 'userPwd') {
-              this.ruleForm2.checkPass = arr2[1];
+          this.logining = true;
+          //NProgress.start();
+          var loginParams = {
+            name: this.ruleForm2.account,
+            passwd: md5(this.ruleForm2.checkPass)
+          };
+          console.log("loginParams:" + JSON.stringify(loginParams));
+          requestLogin(loginParams).then(data => {
+            this.logining = false;
+            //NProgress.done();
+            console.log("requestLogin data:" + JSON.stringify(data));
+            let account = data.data.myModel.account;
+            let token = data.data.myModel.token;
+            if (account === null) {
+              let msg = "账号或密码错误";
+              this.$message({
+                message: msg,
+                type: "error"
+              });
+            } else {
+              sessionStorage.setItem("isAdmin", account.isAdmin);
+              sessionStorage.setItem("accountId", account.id);
+              sessionStorage.setItem("token", JSON.stringify(token));
+              this.$store.commit("UPDATE_TOKEN", token);
+              this.$store.commit("UPDATE_ACCOUNT", account);
+              this.$router.push({ path: "/user" });
             }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //设置cookie
+    setCookie(c_name, c_pwd, chk, exdays) {
+      var exdate = new Date(); //获取时间
+      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
+      //字符串拼接cookie
+      window.document.cookie =
+        "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+      window.document.cookie =
+        "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+      window.document.cookie =
+        "checked" + "=" + chk + ";path=/;expires=" + exdate.toGMTString();
+    },
+    //读取cookie
+    getCookie: function() {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split("; "); //这里显示的格式需要切割一下自己可输出看下
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split("="); //再次切割
+          //判断查找相对应的值
+          if (arr2[0] == "userName") {
+            this.ruleForm2.account = arr2[1]; //保存到保存数据的地方
+          } else if (arr2[0] == "userPwd") {
+            this.ruleForm2.checkPass = arr2[1];
+          } else if (arr2[0] == "checked") {
+            console.log("checked:" + arr2[1]);
+            this.checked = arr2[1] === "" ? false : true;
           }
         }
-      },
-      //清除cookie
-      clearCookie: function() {
-        this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
+      } else {
+        console.log("cookie null checked:false");
+        this.checked = false;
       }
-
     },
-    //页面加载调用获取cookie值
-    mounted() {
-      this.getCookie();
-    },
+    //清除cookie
+    clearCookie: function() {
+      this.setCookie("", "", "", -1); //修改2值都为空，天数为负1天就好了
+    }
+  },
+  //页面加载调用获取cookie值
+  mounted() {
+    this.getCookie();
   }
-
+};
 </script>
 
 <style lang="scss" scoped>
-  .login-container {
-    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    margin: 180px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    .title {
-      margin: 0px auto 40px auto;
-      text-align: center;
-      color: #505458;
-    }
-    .remember {
-      margin: 0px 0px 35px 0px;
-    }
+.login-container {
+  /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  background-clip: padding-box;
+  margin: 180px auto;
+  width: 350px;
+  padding: 35px 35px 15px 35px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  .title {
+    margin: 0px auto 40px auto;
+    text-align: center;
+    color: #505458;
   }
+  .remember {
+    margin: 0px 0px 35px 0px;
+  }
+}
 </style>

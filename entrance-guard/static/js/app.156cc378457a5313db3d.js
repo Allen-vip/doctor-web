@@ -3222,80 +3222,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "楼栋",
-      "prop": "buildingNum"
-    }
-  }, [_c('el-input', {
-    attrs: {
-      "auto-complete": "off"
-    },
-    model: {
-      value: (_vm.addForm.buildingNum),
-      callback: function($$v) {
-        _vm.$set(_vm.addForm, "buildingNum", $$v)
-      },
-      expression: "addForm.buildingNum"
-    }
-  })], 1), _vm._v(" "), _c('el-form-item', {
-    attrs: {
-      "label": "单元",
-      "prop": "unitNum"
-    }
-  }, [_c('el-input', {
-    attrs: {
-      "auto-complete": "off"
-    },
-    model: {
-      value: (_vm.addForm.unitNum),
-      callback: function($$v) {
-        _vm.$set(_vm.addForm, "unitNum", $$v)
-      },
-      expression: "addForm.unitNum"
-    }
-  })], 1), _vm._v(" "), _c('el-form-item', {
-    attrs: {
-      "label": "房间号",
-      "prop": "roomNum"
-    }
-  }, [_c('el-input', {
-    attrs: {
-      "auto-complete": "off"
-    },
-    model: {
-      value: (_vm.addForm.roomNum),
-      callback: function($$v) {
-        _vm.$set(_vm.addForm, "roomNum", $$v)
-      },
-      expression: "addForm.roomNum"
-    }
-  })], 1), _vm._v(" "), _c('el-form-item', {
-    attrs: {
-      "label": "类型",
-      "prop": "type"
-    }
-  }, [_c('el-select', {
-    attrs: {
-      "placeholder": "请选择类型"
-    },
-    model: {
-      value: (_vm.addForm.type),
-      callback: function($$v) {
-        _vm.$set(_vm.addForm, "type", $$v)
-      },
-      expression: "addForm.type"
-    }
-  }, [_c('el-option', {
-    attrs: {
-      "label": "业主",
-      "value": 0
-    }
-  }), _vm._v(" "), _c('el-option', {
-    attrs: {
-      "label": "访客",
-      "value": 1
-    }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
-    attrs: {
       "label": "身份证",
       "prop": "identityCardNum"
     }
@@ -3396,27 +3322,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "addForm.selDevices"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
-    attrs: {
-      "label": "黑名单"
-    }
-  }, [_c('el-checkbox-group', {
-    model: {
-      value: (_vm.blackList),
-      callback: function($$v) {
-        _vm.blackList = $$v
-      },
-      expression: "blackList"
-    }
-  }, [_c('el-checkbox', {
-    attrs: {
-      "label": "1"
-    }
-  }, [_vm._v("拒开")]), _vm._v(" "), _c('el-checkbox', {
-    attrs: {
-      "label": "2"
-    }
-  }, [_vm._v("报警")])], 1)], 1)], 1), _vm._v(" "), _c('div', {
+  })], 1)], 1), _vm._v(" "), _c('div', {
     staticClass: "dialog-footer",
     attrs: {
       "slot": "footer"
@@ -10385,6 +10291,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           trigger: "blur",
           type: "number"
         }],
+        fnOnServer: [{ required: true, message: "请上传图片到服务器" }],
         buildingNum: [{ required: true, message: "请输入楼栋", trigger: "blur" }],
         unitNum: [{ required: true, message: "请输入单元", trigger: "blur" }],
         roomNum: [{ required: true, message: "请输入房间号", trigger: "blur" }],
@@ -10430,6 +10337,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           trigger: "blur"
         }],
         buildingNum: [{ required: true, message: "请输入楼栋", trigger: "blur" }],
+        fnOnServer: [{ required: true, message: "请上传图片到服务器" }],
         unitNum: [{ required: true, message: "请输入单元", trigger: "blur" }],
         roomNum: [{ required: true, message: "请输入房间号", trigger: "blur" }],
         type: [{
@@ -11502,4 +11410,4 @@ module.exports = Component.exports
 /***/ })
 
 },[449]);
-//# sourceMappingURL=app.49cb8cfa87ce2a4de0f3.js.map
+//# sourceMappingURL=app.156cc378457a5313db3d.js.map

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="医嘱" :visible="visibleAdvice">
+  <el-dialog title="医嘱" :visible.sync="visibleAdvice" :close="toggleVisible">
     <el-form ref="form" :model="form" label-width="170px" :rules="rules">
       <el-form-item label="体温正常" prop="normalAd">
         <el-input v-model="form.normalAd" placeholder="请输入正常体温医嘱"></el-input>
@@ -7,9 +7,9 @@
       <el-form-item label="体温异常" prop="exceptionAd">
         <el-input v-model="form.exceptionAd" placeholder="请输入异常体温医嘱"></el-input>
       </el-form-item>
-      <el-form-item label="体温报警上限值(℃)" prop="bodyTempGuard">
+      <!-- <el-form-item label="体温报警上限值(℃)" prop="bodyTempGuard">
         <el-input v-model="form.bodyTempGuard" placeholder="请输入体温报警上限值"></el-input>
-      </el-form-item>
+      </el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="toggleVisible">取 消</el-button>
@@ -58,6 +58,7 @@ export default {
     visibleAdvice(newData) {
       if (newData === true) {
         this.getQuery();
+      } else {
       }
     }
   },
