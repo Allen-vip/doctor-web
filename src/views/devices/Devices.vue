@@ -12,6 +12,14 @@
         <el-form-item>
           <el-button type="primary" @click="handleAdd">新增</el-button>
         </el-form-item>
+        <el-form-item>
+          <!-- <el-button type="primary" @click="copyURL" class="btn"
+            >复制链接</el-button
+          > -->
+          <button :data-clipboard-text="copyData" class="btn" @click="copyURL">
+            复制用户注册地址
+          </button>
+        </el-form-item>
       </el-form>
     </el-col>
 
@@ -23,11 +31,33 @@
       @selection-change="selsChange"
       style="width: 100%;"
     >
-      <el-table-column type="selection" width="35" align="center"></el-table-column>
+      <el-table-column
+        type="selection"
+        width="35"
+        align="center"
+      ></el-table-column>
       <el-table-column type="index" width="60" align="center"></el-table-column>
-      <el-table-column prop="buildingNum" label="楼栋" width="120" sortable align="center"></el-table-column>
-      <el-table-column prop="unitNum" label="单元" width="120" sortable align="center"></el-table-column>
-      <el-table-column prop="aliaId" label="设备ID" width="150" sortable align="center"></el-table-column>
+      <el-table-column
+        prop="buildingNum"
+        label="楼栋"
+        width="120"
+        sortable
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="unitNum"
+        label="单元"
+        width="120"
+        sortable
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="aliaId"
+        label="设备ID"
+        width="150"
+        sortable
+        align="center"
+      ></el-table-column>
       <el-table-column
         prop="type"
         label="类型"
@@ -36,27 +66,51 @@
         sortable
         align="center"
       ></el-table-column>
-      <el-table-column prop="macAddr" label="MAC地址" width="180" sortable align="center"></el-table-column>
-      <el-table-column prop="connState" label="在线状态" width="180" sortable show-overflow-tooltip></el-table-column>
+      <el-table-column
+        prop="macAddr"
+        label="MAC地址"
+        width="180"
+        sortable
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="connState"
+        label="在线状态"
+        width="180"
+        sortable
+        show-overflow-tooltip
+      ></el-table-column>
       <el-table-column
         property="accountNickName"
         label="账号"
         width="120"
         sortable
         align="center"
-        v-if="isAdmin===1"
+        v-if="isAdmin === 1"
       ></el-table-column>
       <el-table-column label="操作" align="center">
         <template scope="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+          <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="danger"
+            size="small"
+            @click="handleDel(scope.$index, scope.row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
     <!--工具条-->
     <el-col :span="24" class="toolbar">
-      <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+      <el-button
+        type="danger"
+        @click="batchRemove"
+        :disabled="this.sels.length === 0"
+        >批量删除</el-button
+      >
       <el-pagination
         layout="prev, pager, next"
         @current-change="handleCurrentChange"
@@ -67,16 +121,33 @@
     </el-col>
 
     <!--编辑界面-->
-    <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+    <el-dialog
+      title="编辑"
+      v-model="editFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="editForm"
+        label-width="80px"
+        :rules="editFormRules"
+        ref="editForm"
+      >
         <el-form-item label="楼栋" prop="buildingNum">
-          <el-input v-model="editForm.buildingNum" auto-complete="off"></el-input>
+          <el-input
+            v-model="editForm.buildingNum"
+            auto-complete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item label="单元" prop="unitNum">
           <el-input v-model="editForm.unitNum" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="设备ID" prop="aliaId">
-          <el-select v-model="editForm.aliaId" filterable placeholder="请选择" style="width:50%">
+          <el-select
+            v-model="editForm.aliaId"
+            filterable
+            placeholder="请选择"
+            style="width:50%"
+          >
             <el-option
               v-for="ptuid in this.candidate_ptuids"
               :key="ptuid"
@@ -97,21 +168,43 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="editFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+        <el-button
+          type="primary"
+          @click.native="editSubmit"
+          :loading="editLoading"
+          >提交</el-button
+        >
       </div>
     </el-dialog>
 
     <!--新增界面-->
-    <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-      <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+    <el-dialog
+      title="新增"
+      v-model="addFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="addForm"
+        label-width="80px"
+        :rules="addFormRules"
+        ref="addForm"
+      >
         <el-form-item label="楼栋" prop="buildingNum">
-          <el-input v-model="addForm.buildingNum" auto-complete="off"></el-input>
+          <el-input
+            v-model="addForm.buildingNum"
+            auto-complete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item label="单元" prop="unitNum">
           <el-input v-model="addForm.unitNum" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="设备ID" prop="aliaId">
-          <el-select v-model="addForm.aliaId" filterable placeholder="请选择" style="width:50%">
+          <el-select
+            v-model="addForm.aliaId"
+            filterable
+            placeholder="请选择"
+            style="width:50%"
+          >
             <el-option
               v-for="ptuid in this.candidate_ptuids"
               :key="ptuid"
@@ -132,7 +225,12 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+        <el-button
+          type="primary"
+          @click.native="addSubmit"
+          :loading="addLoading"
+          >提交</el-button
+        >
       </div>
     </el-dialog>
   </section>
@@ -148,6 +246,7 @@ import {
   updateDevice,
   addDevice
 } from "../../api/api";
+import Clipboard from "clipboard";
 import { apiGetPtuidList, apiGetPtuidCandidateList } from "../../api/api";
 
 export default {
@@ -156,6 +255,7 @@ export default {
       filters: {
         name: ""
       },
+      copyData: "",
       isAdmin: 0,
       devices: [],
       ptuids: [],
@@ -385,6 +485,26 @@ export default {
           });
         })
         .catch(() => {});
+    },
+    copyURL() {
+      var ids = [];
+      this.sels.map(item => {
+        if (item.aliaId) {
+          ids.push(item.aliaId);
+        }
+      });
+      if (ids.length === 0) {
+        this.$message.error("请先选择设备");
+        return "";
+      }
+      let url = `http://rlcwuser.ehteknology.com:8000/entrance-guard/entrance-guard-h5/index.html#/login?deviceIds=${ids.join(
+        ","
+      )}`;
+      this.copyData = url;
+      var clipboard = new Clipboard(".btn");
+      clipboard.on("success", () => {
+        this.$message.success("复制成功");
+      });
     }
   },
   mounted() {
@@ -398,5 +518,22 @@ export default {
 <style scoped>
 .el-table .cell {
   white-space: pre-line;
+}
+.btn {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #c4c4c4;
+  color: #1f2d3d;
+  margin: 0;
+  padding: 10px 15px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #20a0ff;
+  border-color: #20a0ff;
+  height: 36px;
+  outline: none;
 }
 </style>

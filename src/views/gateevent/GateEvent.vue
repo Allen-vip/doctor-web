@@ -15,16 +15,16 @@
       <el-table-column property="lockCat" label="类型" width="120" sortable align="center"></el-table-column>
       <el-table-column property="media" label="介质" width="120" sortable align="center"></el-table-column>
       <el-table-column property="userName" label="姓名" width="120" sortable align="center"></el-table-column>
-      <el-table-column property="homeName" label="住家" width="180" sortable align="center"></el-table-column>
+      <!-- <el-table-column property="homeName" label="住家" width="180" sortable align="center"></el-table-column> -->
       <el-table-column property="deviceName" label="设备" width="180" sortable align="center"></el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         property="envTemp"
         label="气温(℃)"
         width="120"
         sortable
         align="center"
         v-if="showTemp"
-      ></el-table-column>
+      ></el-table-column>-->
       <el-table-column
         property="humanTemp"
         label="体温(℃)"

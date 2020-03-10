@@ -46,6 +46,7 @@
       <el-table-column type="selection" width="55" align="left"></el-table-column>
       <!-- <el-table-column type="index" width="40" align="center"></el-table-column> -->
       <el-table-column property="name" label="姓名" sortable align="center"></el-table-column>
+      <el-table-column property="mobile" label="手机号" sortable align="center"></el-table-column>
       <el-table-column property="age" label="年龄" width="100" sortable align="center"></el-table-column>
       <el-table-column property="gender" label="性别" sortable align="center" :formatter="formatSex"></el-table-column>
 

@@ -1,6 +1,6 @@
 <template>
-  <el-dialog title="门禁信息" :visible="visibleGuard" class="list-modal">
-    <el-table :data="list" highlight-current-row v-loading="listLoading" width="1200">
+  <el-dialog title="门禁信息" :visible.sync="visibleGuardModal" class="list-modal">
+    <el-table :data="list" highlight-current-row v-loading="listLoading" width="1000">
       <el-table-column
         property="srcTs"
         label="时间"
@@ -11,8 +11,8 @@
       ></el-table-column>
       <el-table-column property="lockCat" label="类型" width="120" sortable align="center"></el-table-column>
       <el-table-column property="media" label="介质" width="120" sortable align="center"></el-table-column>
-      <el-table-column property="userName" label="姓名" width="120" sortable align="center"></el-table-column>
-      <el-table-column property="homeName" label="住家" width="180" sortable align="center"></el-table-column>
+      <!-- <el-table-column property="userName" label="姓名" width="120" sortable align="center"></el-table-column> -->
+      <!-- <el-table-column property="homeName" label="住家" width="180" sortable align="center"></el-table-column> -->
       <el-table-column property="deviceName" label="设备" width="180" sortable align="center"></el-table-column>
       <el-table-column
         property="envTemp"
@@ -66,7 +66,8 @@ export default {
     return {
       list: [],
       showTemp: true,
-      listLoading: false
+      listLoading: false,
+      visibleGuardModal: false
     };
   },
   watch: {
@@ -74,6 +75,7 @@ export default {
       if (newData === true) {
         this.getQuery();
       }
+      this.visibleGuardModal = newData;
     }
   },
   created() {
@@ -84,6 +86,13 @@ export default {
       this.listLoading = true;
       gateEvents({ aliaId: this.aliaId }).then(({ data = {} }) => {
         // this.total = res.data.myModel.total || 100;
+        data.myModel.forEach(e => {
+          e.deviceName =
+            (e.deviceBuildingNum || "?") +
+            "栋" +
+            (e.deviceUnitNum || "?") +
+            "单元";
+        });
         this.list = data.myModel;
         this.listLoading = false;
       });
@@ -103,6 +112,6 @@ export default {
 </script>
 <style >
 .list-modal :global(.el-dialog--small) {
-  width: 1400px;
+  width: 1000px;
 }
 </style>
