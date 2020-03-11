@@ -2053,7 +2053,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.copyURL
     }
-  }, [_vm._v("\n          复制用户注册地址\n        ")])])], 1)], 1), _vm._v(" "), _c('el-table', {
+  }, [_vm._v("复制用户注册地址")])])], 1)], 1), _vm._v(" "), _c('el-table', {
     directives: [{
       name: "loading",
       rawName: "v-loading",
@@ -8182,98 +8182,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 //import NProgress from 'nprogress'
@@ -8508,8 +8416,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     copyURL() {
       var ids = [];
       this.sels.map(item => {
-        if (item.aliaId) {
-          ids.push(item.aliaId);
+        if (item.id) {
+          ids.push(item.id);
         }
       });
       if (ids.length === 0) {
@@ -11539,4 +11447,4 @@ module.exports = Component.exports
 /***/ })
 
 },[449]);
-//# sourceMappingURL=app.9e3094160416b46b9a33.js.map
+//# sourceMappingURL=app.6d24cb039d7a5fa829a6.js.map
