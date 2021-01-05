@@ -18,7 +18,7 @@
     "build-anhui-zhaofengkeji-prod": "node build/build_anhui_zhaofengkeji_prod.js"
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "clipboard": "^2.0.6",
     "echarts": "^3.3.2",
     "element-ui": "^1.2.8",
